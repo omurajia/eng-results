@@ -38,64 +38,43 @@
   <h1>لوحة إدارة الحجب</h1>
   <div class="sub">قسم المالية — كلية الهندسة. فك الحجب عن الطالب يظهر نتيجته له خلال دقيقة تقريباً.</div>
 
-  <div class="tok" id="tokBox">
-    <label>رمز الربط (GitHub Token) — يُدخل مرة واحدة ويُحفظ في هذا المتصفح فقط</label>
-    <input id="tok" type="password" placeholder="github_pat_...">
-    <div class="row">
-      <button class="b-save" onclick="saveTok()">حفظ الرمز والدخول</button>
-      <button class="b-ghost" onclick="clearTok()">مسح الرمز</button>
-    </div>
-  </div>
-
-  <div id="panel" style="display:none;">
+  <div id="panel">
     <div class="add">
       <input id="addRoll" placeholder="اكتب رقم الطالب لحجبه (مثال 25E010)">
       <button class="b-bl" onclick="doBlock()">حجب</button>
     </div>
     <div style="margin:6px 0 4px;font-weight:800;">الطلاب المحجوبون <span class="count" id="cnt">0</span></div>
     <table><thead><tr><th>الرقم الدراسي</th><th>الاسم</th><th></th></tr></thead>
-    <tbody id="list"></tbody></table>
+    <tbody id="list"><tr><td colspan="3" class="empty">جارٍ التحميل…</td></tr></tbody></table>
   </div>
 </div>
 <div id="toast"></div>
 
 <script>
-const REPO='omurajia/eng-results', FILE='block.json', BR='main';
+const BLOB='https://jsonblob.com/api/jsonBlob/019f89a7-76af-7beb-8636-ea580a16bdf4';
 const NAMES={"25E001": "عبدالرحمن سبع فؤاد دامي", "25E009": "حمد صالح حمد عبدالله", "25E010": "خميس محمد خميس", "25E011": "صالح عارف صالح بركه", "25E007": "جمال سعيد ميكائيل احميده", "25E008": "عبدالله صالح سعيد", "25E013": "اياد احمد عثمان مختار", "25E003": "عبدالمجيد عبدالله السنوسي عبدالحق", "25E012": "اياد علي عبدالله بوبكر", "25E002": "عبدالسلام سليمان ادريس خطاب", "25E004": "محمد حافظ محمد خطاب", "25E005": "عبدالباسط اشرف عبدالحميد حسن", "25E014": "مفتاح فرحات مفتاح درمان", "25E017": "ادريس عبدالناصر ادريس خزيم", "25E006": "احمد ادم موسى كريم", "25E015": "محمد خميس محمد عبدالونيس", "25E019": "عبدالرحمن عادل حمد المهدوي", "25E020": "عبدالرحمن محمود فرج جاب الله", "25E021": "عبدالله صالح عيسى عبدالله", "25E022": "وسام سعيد مكائيل أحميدة", "25E023": "عبدالرحمن ابراهيم اسماعيل وحيدة", "25E024": "عقوب حميد عاقوب الصائم", "25E025": "خالد اشرف عبدالرحيم ثابت", "25E026": "عبدالناصر سعيد عبدالله الطائع", "25E027": "احمد عبدالسلام احمد صالح", "25E028": "المنذر سامي علي محمد", "25E029": "اجويلي انور خميس محمد", "25E030": "السنوسي ابراهيم السنوسي بشير", "25E031": "انس خالد سعد رويفه", "25E032": "عبدالله صالح سالم عبدربه", "25E033": "جمعه محمد جمعه ابراهيم", "25E036": "رزق معاون رزق محمد", "25E037": "صالح جمعة مصطفى عبدربة", "25E038": "بوغرارة جمعه مصطفى عبدربه", "25E039": "موسى منصور عبدالغني شعيب", "25E040": "عبدالله مختار مفتاح خطاب", "25E041": "محمد جمال عبدالناصر سليمان", "25E042": "طارق عزالدين رزق عياد", "25E043": "اسامه ضيف سالم عبدالله", "25E044": "فارس عاطف ابراهيم ناجي", "25E045": "الجيلاني عبدالكريم عوض ابراهيم", "25E046": "بغداد عبدالكريم عوض عيسى", "25E047": "محمد حسين محمد الزروق", "25E048": "مصطفى احمد عبدالحميد يونس", "25E050": "سالم اشرف سالم حسن", "25E049": "ابراهيم رمضان نوري خليل", "25E051": "عبدالله علي سالم عبدالحميد", "25E034": "فوز عبدالوهاب طاهر عثمان", "25E056": "الناجي مرضي ناجي عبدالستار", "25E057": "محمد انيس عبدالغني محمد", "25E053": "محمد عبدالسلام اسماعيل بوشوق", "25E055": "عبدالرحمن مراجع علي قاسم", "25E054": "المهدي عبدالسلام عبدالنبي المهدي", "26E058": "محمد نصر عبدالله حمد", "26E059": "رمضان محمد رمضان الصفراني", "26E060": "ابراهيم محمود ادريس عبدالسلام", "26E061": "القاسم جمعة قاسم حسين", "26E062": "خليل جمعه محمد خليل", "26E063": "سراج عبدالكريم موسي  عبدالجليل", "26E064": "ايوب عبد الناصر رمضان بشير", "26E065": "ياسر خيرالله الجالي سليمان", "26E066": "زكريا ادريس محمد اهويدي"};
-let TOKEN=localStorage.getItem('gh_tok')||'';
-let sha=null, list=["25E007", "25E008", "25E009", "25E013", "25E014", "25E023", "25E025", "25E026", "25E029", "25E031", "25E032", "25E037", "25E038", "25E047", "25E049", "25E051", "25E057", "25E059", "25E065"];
+let list=["25E007", "25E008", "25E009", "25E013", "25E014", "25E023", "25E025", "25E026", "25E029", "25E031", "25E032", "25E037", "25E038", "25E047", "25E049", "25E051", "25E057", "25E059", "25E065"], busy=false;
 
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
-function api(path,opts){opts=opts||{};opts.headers=Object.assign({'Authorization':'Bearer '+TOKEN,'Accept':'application/vnd.github+json'},opts.headers||{});return fetch('https://api.github.com/repos/'+REPO+'/'+path,opts);}
-function b64e(s){return btoa(unescape(encodeURIComponent(s)));}
-function b64d(s){return decodeURIComponent(escape(atob(s.replace(/\s/g,''))));}
-
-function saveTok(){var v=document.getElementById('tok').value.trim();if(!v){toast('أدخل الرمز');return;}TOKEN=v;localStorage.setItem('gh_tok',v);load();}
-function clearTok(){localStorage.removeItem('gh_tok');TOKEN='';document.getElementById('panel').style.display='none';document.getElementById('tokBox').style.display='block';toast('تم مسح الرمز');}
 
 async function load(){
-  if(!TOKEN){document.getElementById('tokBox').style.display='block';return;}
   try{
-    const r=await api('contents/'+FILE+'?ref='+BR+'&t='+Date.now(),{cache:'no-store'});
-    if(r.status===401){toast('الرمز غير صحيح');return;}
-    if(!r.ok){toast('تعذر القراءة ('+r.status+')');return;}
-    const j=await r.json();sha=j.sha;
-    try{list=JSON.parse(b64d(j.content));}catch(e){list=[];}
-    list=list.map(x=>String(x).toUpperCase().trim());
-    document.getElementById('tokBox').style.display='none';
-    document.getElementById('panel').style.display='block';
-    render();
-  }catch(e){toast('خطأ اتصال');}
+    const r=await fetch(BLOB+'?t='+Date.now(),{cache:'no-store',headers:{'Accept':'application/json'}});
+    if(r.ok){const j=await r.json();if(Array.isArray(j))list=j.map(x=>String(x).toUpperCase().trim());}
+  }catch(e){toast('تعذر التحميل — تحقق من الاتصال');}
+  render();
 }
-async function save(newList,note){
-  const body={message:note,content:b64e(JSON.stringify(newList)),sha:sha,branch:BR};
-  const r=await api('contents/'+FILE,{method:'PUT',body:JSON.stringify(body)});
-  const j=await r.json();
-  if(j.content){sha=j.content.sha;list=newList.map(x=>x.toUpperCase().trim());render();toast('تم الحفظ — يظهر للطالب خلال دقيقة');}
-  else{toast('فشل: '+(j.message||'غير معروف'));}
+async function save(newList,ok){
+  if(busy)return;busy=true;
+  try{
+    const r=await fetch(BLOB,{method:'PUT',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(newList)});
+    if(r.ok){list=newList.map(x=>x.toUpperCase().trim());render();toast(ok);}
+    else toast('فشل الحفظ ('+r.status+')');
+  }catch(e){toast('فشل الاتصال');}
+  busy=false;
 }
-function unblock(roll){if(confirm('فك الحجب عن '+roll+'؟'))save(list.filter(x=>x!==roll),'unblock '+roll);}
-function doBlock(){var v=document.getElementById('addRoll').value.toUpperCase().trim();if(!v)return;if(list.includes(v)){toast('محجوب مسبقاً');return;}save(list.concat([v]),'block '+v);document.getElementById('addRoll').value='';}
+function unblock(roll){if(confirm('فك الحجب عن '+roll+'؟'))save(list.filter(x=>x!==roll),'تم فك الحجب — يظهر للطالب خلال ثوانٍ');}
+function doBlock(){var v=document.getElementById('addRoll').value.toUpperCase().trim();if(!v)return;if(list.includes(v)){toast('محجوب مسبقاً');return;}save(list.concat([v]),'تم الحجب');document.getElementById('addRoll').value='';}
 
 function render(){
   var tb=document.getElementById('list');document.getElementById('cnt').textContent=list.length;
@@ -106,7 +85,7 @@ function render(){
   }).join('');
 }
 document.getElementById('addRoll').addEventListener('keydown',e=>{if(e.key==='Enter')doBlock();});
-if(TOKEN)load();
+load();
 </script>
 </body>
 </html>

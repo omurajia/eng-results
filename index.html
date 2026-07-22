@@ -141,9 +141,10 @@
 
 <script>
 let BLOCK = (["25E007", "25E008", "25E009", "25E013", "25E014", "25E023", "25E025", "25E026", "25E029", "25E031", "25E032", "25E037", "25E038", "25E047", "25E049", "25E051", "25E057", "25E059", "25E065"]).map(x=>String(x).toUpperCase().trim());
+const BLOB='https://jsonblob.com/api/jsonBlob/019f89a7-76af-7beb-8636-ea580a16bdf4';
 async function refreshBlock(){
   try{
-    const r=await fetch('block.json?t='+Date.now(),{cache:'no-store'});
+    const r=await fetch(BLOB+'?t='+Date.now(),{cache:'no-store',headers:{'Accept':'application/json'}});
     if(r.ok){ const j=await r.json(); if(Array.isArray(j)) BLOCK=j.map(x=>String(x).toUpperCase().trim()); }
   }catch(e){}
 }
