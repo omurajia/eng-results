@@ -158,6 +158,19 @@
   tbody tr:last-child td{border-bottom:none;}
   .fail{color:var(--fail);font-weight:800;}
 
+  .rev-notes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px;}
+  .rev-note{display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.72);
+        border:1px solid var(--border);border-radius:18px;padding:14px 15px;box-shadow:var(--shadow-sm);
+        animation:scaleIn .4s ease both;}
+  .rev-note .ic{width:42px;height:42px;flex:0 0 auto;border-radius:13px;display:flex;
+        align-items:center;justify-content:center;font-size:21px;color:#fff;}
+  .rev-note.n1 .ic{background:linear-gradient(135deg,#F59E0B,#F97316);}
+  .rev-note.n2 .ic{background:linear-gradient(135deg,#EF4444,#DC2626);}
+  .rev-note .tx{text-align:right;min-width:0;}
+  .rev-note .tx .t{font-weight:800;font-size:14px;color:var(--text);}
+  .rev-note .tx .d{font-size:12.5px;color:var(--muted);font-weight:600;margin-top:3px;line-height:1.6;}
+  .rev-note .tx .d b{color:#DC2626;font-weight:800;}
+  @media (max-width:520px){ .rev-notes{grid-template-columns:1fr;gap:9px;} }
   .credit{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:16px;
         font-size:13.5px;font-weight:800;letter-spacing:.2px;
         background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
@@ -360,6 +373,14 @@ async function showResult(){
       '<div class="stat s3"><i class="bi bi-award-fill"></i><div class="num">'+ovLt+'</div><div class="lab">التقدير</div><div class="sub">'+ovAr+'</div></div>'+
     '</div>'+
     table+
+    '<div class="rev-notes">'+
+      '<div class="rev-note n1"><div class="ic"><i class="bi bi-clock-history"></i></div>'+
+        '<div class="tx"><div class="t">مدة المراجعة</div>'+
+        '<div class="d">يحق للطالب التقدّم بطلب مراجعة خلال <b>3 أيام</b> من تاريخ صدور النتيجة.</div></div></div>'+
+      '<div class="rev-note n2"><div class="ic"><i class="bi bi-cash-coin"></i></div>'+
+        '<div class="tx"><div class="t">رسوم المراجعة</div>'+
+        '<div class="d"><b>50 دينار</b> عن كل مادة يُطلب مراجعتها.</div></div></div>'+
+    '</div>'+
     '<div class="credit"><i class="bi bi-pen-fill"></i> تصميم: م. عُمر مراجع</div>'+
     '<div class="actions">'+
       '<button class="btn-pdf" onclick="window.print()"><i class="bi bi-download"></i> تحميل PDF</button>'+
