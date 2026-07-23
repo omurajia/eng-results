@@ -158,7 +158,11 @@
   tbody tr:last-child td{border-bottom:none;}
   .fail{color:var(--fail);font-weight:800;}
 
-  .actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:28px;}
+  .credit{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:16px;
+        font-size:13.5px;font-weight:800;letter-spacing:.2px;
+        background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .credit i{font-size:14px;color:var(--accent);-webkit-text-fill-color:var(--accent);}
+  .actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:22px;}
   .actions button{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:15px;
         padding:14px 26px;font-size:15.5px;font-weight:800;font-family:inherit;cursor:pointer;
         color:#fff;transition:.3s;box-shadow:0 10px 24px -8px rgba(17,24,39,.35);}
@@ -356,6 +360,7 @@ async function showResult(){
       '<div class="stat s3"><i class="bi bi-award-fill"></i><div class="num">'+ovLt+'</div><div class="lab">التقدير</div><div class="sub">'+ovAr+'</div></div>'+
     '</div>'+
     table+
+    '<div class="credit"><i class="bi bi-pen-fill"></i> تصميم م. عُمر مراجع</div>'+
     '<div class="actions">'+
       '<button class="btn-pdf" onclick="window.print()"><i class="bi bi-download"></i> تحميل PDF</button>'+
       '<button class="btn-exit" onclick="goBack()"><i class="bi bi-box-arrow-right"></i> خروج</button>'+
